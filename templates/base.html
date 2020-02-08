@@ -2,8 +2,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+       button {
+    font-family: Aeroport;
+   }
+   input{
+   font-family: Aeroport;
+   }
+   label {
+    font-family: Aeroport;
+   }
+   p {
+    font-family: Aeroport;
+   }
+   a {
+    font-family: Aeroport;
+   }
+.popup-fade {
+	display: none;
+}
+.popup-fade:before {
+	content: '';
+	background: #000;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0.7;
+	z-index: 9999;
+}
+.popup {
+	position: fixed;
+	top: 20%;
+	left: 50%;
+	padding: 20px;
+	width: 300px;
+	margin-left: -200px;
+	background: #fff;
+	border: 1px solid orange;
+	border-radius: 17px;
+	z-index: 99999;
+	opacity: 1;
+}
+.popup-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+
+
+    </style>
+
+    <script src="https://yandex.st/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+$(document).ready(function($) {
+	$('.popup-open').click(function() {
+		$('.popup-fade').fadeIn();
+		return false;
+	});
+
+	$('.popup-close').click(function() {
+		$(this).parents('.popup-fade').fadeOut();
+		return false;
+	});
+
+	$(document).keydown(function(e) {
+		if (e.keyCode === 27) {
+			e.stopPropagation();
+			$('.popup-fade').fadeOut();
+		}
+	});
+
+	$('.popup-fade').click(function(e) {
+		if ($(e.target).closest('.popup').length == 0) {
+			$(this).fadeOut();
+		}
+	});
+});
+
+
+
+    </script>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'css/flexslider.css' %}">
     <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
@@ -14,69 +99,102 @@
     <title>{% block title %} {% endblock %}</title>
 </head>
 <body>
-    <section>
-        <nav class="twinparty-nav" role="navigation">
-			<div class="top-menu">
-				<div class="container">
-					<div class="row">
-						<div class="col-xs-12 menu-1">
-							<ul>
-								<li class="active"><a href="/">Главная</a></li>
-								<li><a href="child.html">Школьникам</a></li>
-								<li><a href="parents.html">Родителям</a></li>
-								<li><a href="teach.html">Педагогам</a></li>
-								<li><a href="contact.html">Контакты</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</nav>
-    </section>
-    <section>
-        <div>
-            {% block content %}
-
-            {% endblock %}
+<section>
+    <nav class="twinparty-nav" role="navigation">
+        <div class="top-menu">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 menu-1">
+                        <ul>
+                            <li class="active"><a href="/">Главная</a></li>
+                            <li><a href="child.html">Школьникам</a></li>
+                            <li><a href="parents.html">Родителям</a></li>
+                            <li><a href="teach.html">Педагогам</a></li>
+                            <li><a href="contact.html">Контакты</a>
+                            <li><a class="popup-open" href="#" style="padding-left: 670px">Войти</a></li>
+                            <div class="popup-fade">
+                                <div class="popup">
+                                    <a class="popup-close" href="#">Закрыть</a>
+                                    <h4 align="center"	>ВХОД</h4>
+                                    <form method="post">
+                                        {%csrf_token%}
+                                            <label>Email/login</label>
+                                            <input type="text" name="login_or_email" class="form-control"
+                                                   value="{{login_or_email}}" required>
+                                            <label>Пароль</label>
+                                            <input type="password" name="password" class="form-control"
+                                                   value="{{password}}"
+                                                   required>
+										<a align="center">Регистрация</a> <br>
+                                        <button type="submit" class="btn btn-outline-success" >
+                                            Войти
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
-    <section>
-        <footer id="twinparty-footer" role="contentinfo">
-			<div class="container">
-				<div class="row pb-60">
-				<form id="myForm" action="mail.php" method="post">
-					<div class="col-sm-2 plpr-0">
-						<div class="subscribe_icon">
-							<img src="images/sub_icon.png" alt="">
-						</div>
-					</div>
-					<div class="col-sm-6 plpr-0">
-					<label for="email"></label>
-					<input type="text" name="email" id="email" class="form-control subscribe_form" placeholder="Ваша почта" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" required="">
-					</div>
-					<div class="col-sm-4 plpr-0">
-						<button type="submit" class="btn btn-primary submit-btn" style="padding: 20px 45px; margin: 20px 0;border: none;">Оставить заявку</button>
-					</div>
-				</form>
-				</div>
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<p>
-							<ul class="twinparty-social-icons">
-								<li><a href="#"><i class="icon-twitter"></i></a></li>
-								<li><a href="#"><i class="icon-facebook"></i></a></li>
-								<li><a href="#"><i class="icon-linkedin"></i></a></li>
-								<li><a href="#"><i class="icon-dribbble"></i></a></li>
-							</ul>
-     					<small class="block"><a href="politica.html">Политика конфиденциальности</a><br>Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved.  <br>by <a href="http://twinparty.ru" target="_blank">twinparty</a></small>
-						</p>
-					</div>
-				</div>
-			</div>
-			</footer>
-    </section>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </nav>
+</section>
+<section>
+    <div>
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</section>
+<section>
+    <footer id="twinparty-footer" role="contentinfo">
+        <div class="container">
+            <div class="row pb-60">
+                <form id="myForm" action="mail.php" method="post">
+                    <div class="col-sm-2 plpr-0">
+                        <div class="subscribe_icon">
+                            <img src="images/sub_icon.png" alt="">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 plpr-0">
+                        <label for="email"></label>
+                        <input type="text" name="email" id="email" class="form-control subscribe_form"
+                               placeholder="Ваша почта" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
+                               required="">
+                    </div>
+                    <div class="col-sm-4 plpr-0">
+                        <button type="submit" class="btn btn-primary submit-btn"
+                                style="padding: 20px 45px; margin: 20px 0;border: none;">Оставить заявку
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>
+                    <ul class="twinparty-social-icons">
+                        <li><a href="#"><i class="icon-twitter"></i></a></li>
+                        <li><a href="#"><i class="icon-facebook"></i></a></li>
+                        <li><a href="#"><i class="icon-linkedin"></i></a></li>
+                        <li><a href="#"><i class="icon-dribbble"></i></a></li>
+                    </ul>
+                    <small class="block"><a href="politica.html">Политика конфиденциальности</a><br>Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script>
+                        All rights reserved. <br>by <a href="http://twinparty.ru" target="_blank">twinparty</a></small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</section>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
 </html>
