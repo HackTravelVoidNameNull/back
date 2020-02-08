@@ -72,6 +72,6 @@ class Guid(AbstractDataUser):
 
 class TuroperatorIntroducer(AbstractDataUser):
 
-    user = models.ForeignKey('SiteUser', on_delete=models.CASCADE)
+    user = models.ForeignKey('SiteUser', on_delete=models.CASCADE, null=False)
     turoperator = models.ForeignKey('turoperator.Turoperator', on_delete=models.CASCADE)
 

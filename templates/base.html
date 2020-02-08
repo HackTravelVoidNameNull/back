@@ -58,9 +58,16 @@
 
     <script src="https://yandex.st/jquery/2.1.1/jquery.min.js"></script>
     <script>
-$(document).ready(function($) {
-	$('.popup-open').click(function() {
-		$('.popup-fade').fadeIn();
+    $(document).ready(function($) {
+        $('#popup-login-open').click(function () {
+            $('#popup-login').fadeIn();
+            return true;
+        });
+    });
+
+	$(document).ready(function ($) {
+        $('#popup-register-open').click(function() {
+		    $('#popup-register').fadeIn();
 		return false;
 	});
 
@@ -76,9 +83,9 @@ $(document).ready(function($) {
 		}
 	});
 
-	$('.popup-fade').click(function(e) {
-		if ($(e.target).closest('.popup').length == 0) {
-			$(this).fadeOut();
+	$('.popup-open').click(function(e) {
+		if ($(e.target).closest('.popup').length === 0) {
+			$(this).fadeOut();f
 		}
 	});
 });
@@ -111,20 +118,48 @@ $(document).ready(function($) {
                             <li><a href="parents.html">Родителям</a></li>
                             <li><a href="teach.html">Педагогам</a></li>
                             <li><a href="contact.html">Контакты</a>
-                            <li><a class="popup-open" href="#" style="padding-left: 670px">Войти</a></li>
-                            <div class="popup-fade">
+                            <li><a class="popup-open" href="#" style="padding-left: 670px" id="popup-login-open">Войти</a></li>
+                            <li><a class="popup-open" href="#" id="popup-register-open">Регистрация</a></li>
+                            <div class="popup-fade" id="popup-login">
                                 <div class="popup">
                                     <a class="popup-close" href="#">Закрыть</a>
                                     <h4 align="center"	>ВХОД</h4>
-                                    <form method="post">
+                                    <form method="post" action="{% url 'user:register' %}">
                                         {%csrf_token%}
-                                            <label>Email/login</label>
-                                            <input type="text" name="login_or_email" class="form-control"
-                                                   value="{{login_or_email}}" required>
-                                            <label>Пароль</label>
-                                            <input type="password" name="password" class="form-control"
-                                                   value="{{password}}"
-                                                   required>
+                                            <label>Email/login
+                                                <input type="text" name="login" class="form-control" required>
+                                            </label>
+                                            <label>Пароль
+                                                <input type="password" name="password" class="form-control" required>
+                                            </label>
+                                        <br>
+                                        <button href="" type="submit" class="btn btn-outline-success" >
+                                            Войти
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="popup-fade" id="popup-register">
+                                <div class="popup">
+                                    <a class="popup-close" href="#">Закрыть</a>
+                                    <h4 align="center"	>Регистрация</h4>
+                                    <form method="post" action="{% url 'user:register' %}">
+                                        {%csrf_token%}
+                                            <label>Почта
+                                                <input type="text" name="email" class="form-control" required>
+                                            </label>
+
+                                            <label>Номер телефона
+                                                <input type="text" name="phone_number" class="form-control" required>
+                                            </label>
+
+                                            <label>Пароль
+                                                <input type="password" name="password1" class="form-control" required>
+                                            </label>
+                                            <label>Повторите пароль
+                                                <input type="password" name="password2" class="form-control" required>
+                                            </label>
+
 										<a align="center">Регистрация</a> <br>
                                         <button type="submit" class="btn btn-outline-success" >
                                             Войти
