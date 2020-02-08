@@ -40,3 +40,11 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = SiteUser
         fields = ['email', 'phone_number', 'password1', 'password2']
+
+
+class TuroperatorForm(forms.Form):
+
+    name = forms.CharField(max_length=32)
+    contact_data = forms.CharField(max_length=156)
+
+

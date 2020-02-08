@@ -39,7 +39,9 @@ class CommitForPhysicalTour(models.Model):
 
 class Turoperator(models.Model):
 
-    name = models.CharField(max_length=32)
-    logo = models.ImageField() # for demo
+    name = models.CharField(max_length=32, null=True)
+    logo = models.ImageField(null=True) # for demo
     documents = models.ForeignKey('documents.Document', on_delete=models.SET_NULL, null=True)
     city_zone = models.ManyToManyField('place.Place')
+    user = models.ForeignKey('user.SiteUser', on_delete=models.SET_NULL, null=True)
+    contact_data = models.CharField(max_length=156)
