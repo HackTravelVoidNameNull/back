@@ -21,7 +21,6 @@ class LoginForm(AuthenticationForm):
 
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(max_length=200, label='E-mail', widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
     error_messages = {
         'password_mismatch': 'пароли не совпадают',
@@ -38,3 +37,6 @@ class RegisterForm(UserCreationForm):
         strip=False,
     )
 
+    class Meta:
+        model = SiteUser
+        fields = ['email', 'phone_number', 'password1', 'password2']
