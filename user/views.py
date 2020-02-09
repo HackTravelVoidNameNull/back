@@ -262,3 +262,4 @@ class GuidTourView(HasGuidPermission, FormView):
         context = super().get_context_data(**kwargs)
         guid = Guid.objects.get(self.kwargs.user)
         context['tours'] = guid.tours
+
