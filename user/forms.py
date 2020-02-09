@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm
+from django.shortcuts import get_object_or_404
 
 from .models import *
 from school.models import School
@@ -57,10 +58,9 @@ class TeacherForm(forms.Form):
     patronymic = models.CharField(max_length=32)
 
 
-class StudentsFormSchool(forms.Form):
+class AddChildrenForm(forms.Form):
 
-    student = forms.ChoiceField()
-
+    student_phone = forms.CharField(max_length=32)
 
 class StudentForm(forms.Form):
 
@@ -68,3 +68,12 @@ class StudentForm(forms.Form):
     last_name = models.CharField(max_length=32)
     patronymic = models.CharField(max_length=32)
     school = forms.ModelChoiceField(queryset=School.objects.all())
+
+
+class ParentForm(forms.Form):
+
+    name = models.CharField(max_length=32)
+    last_name = models.CharField(max_length=32)
+    patronymic = models.CharField(max_length=32)
+
+class

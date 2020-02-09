@@ -84,6 +84,10 @@ class HasStudentPermission(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_student or self.request.user.is_admin
 
+class HasGuidPermission(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_guid or self.request.user.is_admin
+
 
 class TuroperatorProfileView(HasParentPermission, FormView):
     template_name = 'accounts/profile_turoperator.html'
@@ -190,12 +194,51 @@ class StudentTourView(HasStudentPermission, TemplateView):
         return context
 
 
-class ParentProfileView(HasParentPermission, TemplateView):
+class ParentProfileView(HasParentPermission, FormView):
     template_name = 'accounts/profile_parent.html'
+
+    form_class = ParentForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         parent = ParentUser.objects.get(user=self.request.user)
         context['children'] = StudentUser.objects.filter(parent=parent)
         return context
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        data = form.cleaned_data
+        parent = ParentUser.objects.get(user=self.request.user)
+        parent.name = data['name']
+        parent.last_name = data['last_name']
+        parent.patronymic = data['patronymic']
+        parent.save()
+        return ret
+
+
+class ParentChildrenView(HasParentPermission, FormView):
+    template_name = 'accounts/profile_parent_children.html'
+
+    form_class = AddChildrenForm
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        data = form.cleaned_data
+        child_user = SiteUser.objects.get(phone_number=form.cleaned_data['student_phone'])
+        if child_user is None:
+            return self.form_invalid(form)
+        parent = ParentUser.objects.get(user=self.request.user)
+        child = StudentUser.objects.get(user=child_user)
+        child.parent = parent
+        child.save()
+        return ret
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        parent = ParentUser.objects.get(user=self.request.user)
+        context['children'] = StudentUser.objects.get(parent=parent)
+        return context
+
+
+class GuidProfileView(HasGuidPermission, FormView):
 
