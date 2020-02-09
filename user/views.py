@@ -164,5 +164,26 @@ class TeacherTourView(HasTeacherPermission, TemplateView):
         context['tours'] = CommitForPhysicalTour.objects.filter(teacher=teacher)
         return context
 
+
 class StudentProfileView(HasStudentPermission, FormView):
-    template_name =
+    template_name = 'accounts/profile_student.html'
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        data = form.cleaned_data
+        student = StudentUser.objects.get(user=self.request.user)
+        student.name = data['name']
+        student.last_name = data['last_name']
+        student.patronymic = data['patronymic']
+        student.school = data['school']
+        student.save()
+        return ret
+
+
+class StudentTourView(HasStudentPermission, TemplateView):
+    template_name = 'accounts/profile_student_tours.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        student = StudentUser.objects.get(user=self.request.user)
+        context['tours'] = CommitForPhysicalTour.objects.filter(student=student)

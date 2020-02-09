@@ -60,3 +60,11 @@ class TeacherForm(forms.ModelForm):
 class StudentsFormSchool(forms.ModelForm):
 
     student = forms.ChoiceField()
+
+
+class StudentForm(models.Model):
+
+    name = models.CharField(max_length=32)
+    last_name = models.CharField(max_length=32)
+    patronymic = models.CharField(max_length=32)
+    school = forms.ChoiceField(choices=School.objects.all())

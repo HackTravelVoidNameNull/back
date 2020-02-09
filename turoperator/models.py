@@ -45,4 +45,4 @@ class Turoperator(models.Model):
     documents = models.ForeignKey('documents.Document', on_delete=models.SET_NULL, null=True)
     city_zone = models.ManyToManyField('place.Place')
     user = models.ForeignKey('user.SiteUser', on_delete=models.SET_NULL, null=True)
-    contact_data = models.CharField(max_length=156)
+    contact_data = models.CharField(max_length=156, null=True)

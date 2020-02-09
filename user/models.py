@@ -90,6 +90,7 @@ class StudentUser(AbstractDataUser):
     city = models.CharField(max_length=32, null=True)
     user = models.ForeignKey('SiteUser', on_delete=models.CASCADE)
     parent = models.ForeignKey('ParentUser', on_delete=models.SET_NULL, null=True)
+    tours = models.ManyToManyField
 
 
 class ParentUser(AbstractDataUser):
@@ -107,5 +108,5 @@ class Guid(AbstractDataUser):
 
 class TuroperatorIntroducer(AbstractDataUser):
 
-    user = models.ForeignKey('SiteUser', on_delete=models.CASCADE)
+    user = models.ForeignKey('SiteUser', on_delete=models.CASCADE, null=True)
     turoperator = models.ForeignKey('turoperator.Turoperator', on_delete=models.CASCADE, null=True)
