@@ -9,17 +9,10 @@ MOVING_TYPES = (
 
 class PhysicalTourRoute(models.Model):
 
-    place_start = models.ForeignKey('place.Platform',
-                                    on_delete=models.SET_NULL,
-                                    null=True,
-                                    related_name='place_as_started')
-    place_finish = models.ForeignKey('place.Platform',
-                                     on_delete=models.SET_NULL,
-                                     null=True,
-                                     related_name='place_as_finished')
+    place = models.ForeignKey('place.Platform', on_delete=models.SET_NULL, null=True)
     time_start = models.TimeField(null=True)
     time_finish = models.TimeField(null=True)
-    moving_type = models.CharField(choices=MOVING_TYPES, max_length=32)
+    moving_type = models.CharField(choices=MOVING_TYPES, max_length=32, default='DRIVING')
     tour = models.ForeignKey('PhysicalTour', on_delete=models.CASCADE)
     queue_number = models.IntegerField()
 
@@ -34,6 +27,7 @@ class PhysicalTour(models.Model):
 class CommitForPhysicalTour(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     date = models.DateField()
+    finish_date = models.DateField()
     tour = models.ForeignKey('PhysicalTour', on_delete=models.CASCADE)
     teacher = models.ForeignKey('user.TeacherUser', on_delete=models.CASCADE, null=True)
 
