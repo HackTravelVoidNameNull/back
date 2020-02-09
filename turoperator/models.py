@@ -22,6 +22,7 @@ class PhysicalTour(models.Model):
     dormitory = models.ForeignKey('place.Place', on_delete=models.SET_NULL, null=True)
     food_supply = models.BooleanField(default=False)
     turoperator = models.ForeignKey('Turoperator', on_delete=models.CASCADE)
+    route = models.ForeignKey('marketplace.Route', on_delete=models.CASCADE, null=True)
 
 
 class CommitForPhysicalTour(models.Model):

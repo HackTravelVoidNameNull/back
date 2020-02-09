@@ -1,3 +1,4 @@
+from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .common import *
@@ -17,6 +18,26 @@ SYSTEM_ROLES = (
 class SystemRole(models.Model):
 
     name = models.CharField(max_length=32, choices=SYSTEM_ROLES)
+
+
+class SiteUserManager(BaseUserManager):
+
+    def _create_user(self, phone_number, email, password):
+        if not phone_number:
+            raise ValueError('The given phone number must be set')
+        email = self.normalize_email(email)
+        user = self.model(phone_number, email=email)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, phone, email, password):
+        return self._create_user(phone, email, password)
+
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        return self._create_user(username, email, password)
+
+
 
 
 class SiteUser(AbstractBaseUser):
@@ -51,8 +72,8 @@ class SiteUser(AbstractBaseUser):
         return self.role.name == 'student'
 
     @property
-    def is_admin(self):
-        return self.role.name == 'admin'
+    def is_tester(self):
+        return self.role.name == 'tester'
 
 
 class AbstractDataUser(models.Model):
