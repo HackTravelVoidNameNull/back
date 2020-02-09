@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm
 
-from .models import SiteUser
+from .models import *
+from school.models import School
 
 
 class LoginForm(AuthenticationForm):
@@ -48,3 +49,14 @@ class TuroperatorForm(forms.Form):
     contact_data = forms.CharField(max_length=156)
 
 
+class TeacherForm(forms.ModelForm):
+
+    school = forms.ChoiceField(choices=School.objects.all())
+    name = models.CharField(max_length=32)
+    last_name = models.CharField(max_length=32)
+    patronymic = models.CharField(max_length=32)
+
+
+class StudentsFormSchool(forms.ModelForm):
+
+    student = forms.ChoiceField()

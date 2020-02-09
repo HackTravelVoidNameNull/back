@@ -5,9 +5,10 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from user.models import *
-from turoperator.models import Turoperator
+from turoperator.models import Turoperator, CommitForPhysicalTour
 from .forms import *
 from .forms import LoginForm, RegisterForm
+from django.db.models import Q
 # Create your views here.
 
 
@@ -72,10 +73,12 @@ class HasParentPermission(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_parent or self.request.user.is_admin
 
+
 class HasTuroperatorPermission(LoginRequiredMixin, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_turoperator or self.request.user.is_admin
+
 
 class HasStudentPermission(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
@@ -93,8 +96,73 @@ class TuroperatorProfileView(HasParentPermission, FormView):
         turoperator = Turoperator.objects.get(user)
         turoperator.name = form.cleaned_data['name']
         turoperator.contact_data = form.contact_data['contact_data']
+        turoperator.save()
         return ret
+
+    def get_context_data(self, **kwargs):
+        turoperator = Turoperator.objects.get(user=self.request.user)
+        context = super().get_context_data(**kwargs)
+        context['tours'] = CommitForPhysicalTour.objects.filter(tour__turoperator=turoperator)
+        context['touroperator'] = turoperator
+        context['curators'] = Guid.objects.filter(turoperator)
+        return context
 
     # user from reuest!!!!!!!!!!!!!!
 
-    
+
+class TeacherProfileView(HasTeacherPermission, FormView):
+    template_name = 'accounts/profile_teacher.html'
+
+    form_class = TeacherForm
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        user = self.request.user
+        data = form.cleaned_data
+        teacher = TeacherUser.objects.get(user=user)
+        teacher.name = data['name']
+        teacher.last_name = data['last_name']
+        teacher.patronymic = data['patronymic']
+        teacher.school = data['school']
+        teacher.save()
+        return ret
+
+
+class TeacherProfileStudentsView(HasTeacherPermission, FormView):
+    template_name = 'accounts/profile_teacher_studets.html'
+
+    def get_form_class(self):
+        teacher = TeacherUser.objects.get(self.request.user)
+
+        class StudentsFormSchool(forms.ModelForm):
+
+            student = forms.ChoiceField(choices=StudentUser.objects.filter(Q(school=teacher.school) and Q(teacheruser__contains=teacher)))
+
+        return StudentsFormSchool
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        user = self.request.user
+
+        teacher = TeacherUser.objects.get(user=user)
+        teacher.students.add(form.cleaned_data['student'])
+        teacher.save()
+        return ret
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['students'] = TeacherUser.objects.get(self.request.user).students
+        return context
+
+
+class TeacherTourView(HasTeacherPermission, TemplateView):
+    template_name = 'accounts/profile_teachers_tours.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        teacher = TeacherUser.objects.get(user=self.request.user)
+        context['tours'] = CommitForPhysicalTour.objects.filter(teacher=teacher)
+        return context
+
+class StudentProfileView(HasStudentPermission, FormView):
+    template_name =

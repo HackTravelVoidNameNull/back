@@ -35,6 +35,7 @@ class CommitForPhysicalTour(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     date = models.DateField()
     tour = models.ForeignKey('PhysicalTour', on_delete=models.CASCADE)
+    teacher = models.ForeignKey('user.TeacherUser', on_delete=models.CASCADE, null=True)
 
 
 class Turoperator(models.Model):

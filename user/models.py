@@ -80,6 +80,7 @@ class TeacherUser(AbstractDataUser):
     user = models.ForeignKey('SiteUser', on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     school = models.ForeignKey('school.School', on_delete=models.SET_NULL, null=True)
+    students = models.ManyToManyField('StudentUser')
 
 
 class StudentUser(AbstractDataUser):
@@ -108,4 +109,3 @@ class TuroperatorIntroducer(AbstractDataUser):
 
     user = models.ForeignKey('SiteUser', on_delete=models.CASCADE)
     turoperator = models.ForeignKey('turoperator.Turoperator', on_delete=models.CASCADE, null=True)
-

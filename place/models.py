@@ -10,7 +10,8 @@ TYPES = (
 
 class Place(models.Model):
 
-    google_maps_place_id = models.CharField(max_length=64)
+    google_maps_place_id = models.CharField(max_length=64, null=True)
+    short_address = models.CharField(max_length=64, null=True)
 
 
 class PlatformImage(models.Model):
