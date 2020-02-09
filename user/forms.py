@@ -49,22 +49,22 @@ class TuroperatorForm(forms.Form):
     contact_data = forms.CharField(max_length=156)
 
 
-class TeacherForm(forms.ModelForm):
+class TeacherForm(forms.Form):
 
-    school = forms.ChoiceField(choices=School.objects.all())
+    school = forms.ModelChoiceField(queryset=School.objects.all())
     name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     patronymic = models.CharField(max_length=32)
 
 
-class StudentsFormSchool(forms.ModelForm):
+class StudentsFormSchool(forms.Form):
 
     student = forms.ChoiceField()
 
 
-class StudentForm(models.Model):
+class StudentForm(forms.Form):
 
     name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     patronymic = models.CharField(max_length=32)
-    school = forms.ChoiceField(choices=School.objects.all())
+    school = forms.ModelChoiceField(queryset=School.objects.all())

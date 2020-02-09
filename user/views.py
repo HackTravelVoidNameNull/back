@@ -187,3 +187,15 @@ class StudentTourView(HasStudentPermission, TemplateView):
         context = super().get_context_data(**kwargs)
         student = StudentUser.objects.get(user=self.request.user)
         context['tours'] = CommitForPhysicalTour.objects.filter(student=student)
+        return context
+
+
+class ParentProfileView(HasParentPermission, TemplateView):
+    template_name = 'accounts/profile_parent.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        parent = ParentUser.objects.get(user=self.request.user)
+        context['children'] = StudentUser.objects.filter(parent=parent)
+        return context
+
