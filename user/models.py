@@ -22,22 +22,18 @@ class SystemRole(models.Model):
 
 class SiteUserManager(BaseUserManager):
 
-    def _create_user(self, phone_number, email, password):
+    def _create_user(self, phone_number, email, password, **kwargs):
         if not phone_number:
             raise ValueError('The given phone number must be set')
         email = self.normalize_email(email)
-        user = self.model(phone_number, email=email)
+        user = self.model(phone_number=phone_number, email=email, **kwargs)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, phone, email, password):
-        return self._create_user(phone, email, password)
-
-    def create_superuser(self, username, email=None, password=None, **extra_fields):
-        return self._create_user(username, email, password)
-
-
+    def create_superuser(self, username, email, password):
+        kwarg = {'role':SystemRole.objects.get_or_create(name='admin')}
+        return self._create_user(username, email, password, **kwarg)
 
 
 class SiteUser(AbstractBaseUser):
@@ -90,6 +86,7 @@ class AbstractDataUser(models.Model):
 
 class TeacherUser(AbstractDataUser):
 
+    chosen_branches = models.ManyToManyField('marketplace.Branch')
     position = models.CharField(max_length=32, null=True)
     user = models.ForeignKey('SiteUser', on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
@@ -99,7 +96,7 @@ class TeacherUser(AbstractDataUser):
 
 class StudentUser(AbstractDataUser):
 
-    test_result = models.ForeignKey('marketplace.Branch', on_delete=models.SET_NULL, null=True)
+    chosen_branches = models.ManyToManyField('marketplace.Branch')
     school = models.ForeignKey('school.School', on_delete=models.SET_NULL, null=True)
     city = models.CharField(max_length=32, null=True)
     user = models.ForeignKey('SiteUser', on_delete=models.CASCADE)

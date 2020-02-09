@@ -84,8 +84,9 @@ class TuroperatorConstructor(HasTuroperatorPermission, DetailView):
         return redirect(reverse('marketplace:main'))
 
 
-class ParentNavigationView(HasParentPermission, TemplateView):
+class ParentNavigationView(HasParentPermission, FormView):
     template_name = 'constructors/parent_navigation.html'
+
 
 
 class ParentRouteChoose(HasParentPermission, TemplateView):
@@ -121,3 +122,12 @@ class ParentTourChoose(HasParentPermission, TemplateView, TourFiltringMixin):
 
 class TeacherTourChoose(HasTeacherPermission, TemplateView, TourFiltringMixin):
     template_name = 'constructors/choose_tour.html'
+
+
+class StudentTourChoose(HasStudentPermission, TemplateView):
+    template_name = 'constructors/student_choose_tour.html'
+
+
+class StudentRouteChoose(HasStudentPermission, TemplateView):
+    template_name = 'constructors/student_choose_route.html'
+

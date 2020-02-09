@@ -16,3 +16,6 @@ class SingleRoute(forms.Form):
     time_start = forms.TimeField()
     time_finish = forms.TimeField()
     queue = forms.IntegerField()
+
+class ParentBranchChoose(forms.Form):
+

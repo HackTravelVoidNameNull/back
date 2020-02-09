@@ -27,8 +27,8 @@ class PhysicalTour(models.Model):
 
 class CommitForPhysicalTour(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    date = models.DateField()
-    finish_date = models.DateField()
+    date = models.DateField(null=True)
+    finish_date = models.DateField(null=True)
     tour = models.ForeignKey('PhysicalTour', on_delete=models.CASCADE)
     teacher = models.ForeignKey('user.TeacherUser', on_delete=models.CASCADE, null=True)
 
