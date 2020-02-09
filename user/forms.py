@@ -53,27 +53,34 @@ class TuroperatorForm(forms.Form):
 class TeacherForm(forms.Form):
 
     school = forms.ModelChoiceField(queryset=School.objects.all())
-    name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
-    patronymic = models.CharField(max_length=32)
+    name = forms.CharField(max_length=32)
+    last_name = forms.CharField(max_length=32)
+    patronymic = forms.CharField(max_length=32)
 
 
 class AddChildrenForm(forms.Form):
 
     student_phone = forms.CharField(max_length=32)
 
+
 class StudentForm(forms.Form):
 
-    name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
-    patronymic = models.CharField(max_length=32)
+    name = forms.CharField(max_length=32)
+    last_name = forms.CharField(max_length=32)
+    patronymic = forms.CharField(max_length=32)
     school = forms.ModelChoiceField(queryset=School.objects.all())
 
 
 class ParentForm(forms.Form):
 
-    name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
-    patronymic = models.CharField(max_length=32)
+    name = forms.CharField(max_length=32)
+    last_name = forms.CharField(max_length=32)
+    patronymic = forms.CharField(max_length=32)
 
-class
+
+class GuidForm(forms.Form):
+
+    name = forms.CharField(max_length=32)
+    last_name = forms.CharField(max_length=32)
+    patronymic = forms.CharField(max_length=32)
+

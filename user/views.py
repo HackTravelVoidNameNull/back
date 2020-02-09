@@ -241,4 +241,24 @@ class ParentChildrenView(HasParentPermission, FormView):
 
 
 class GuidProfileView(HasGuidPermission, FormView):
+    template_name = 'accounts/profile_guid.html'
 
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        user = self.request.user
+        data = form.cleaned_data
+        guid = Guid.objects.get(user=user)
+        guid.name = data['name']
+        guid.last_name = data['last_name']
+        guid.patronymic = data['patronymic']
+        guid.save()
+        return ret
+
+
+class GuidTourView(HasGuidPermission, FormView):
+    template_name = 'accounts/profile_guid_tour.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        guid = Guid.objects.get(self.kwargs.user)
+        context['tours'] = guid.tours

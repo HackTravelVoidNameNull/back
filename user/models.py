@@ -104,6 +104,7 @@ class Guid(AbstractDataUser):
     turoperator = models.ForeignKey('turoperator.Turoperator', on_delete=models.CASCADE, null=True)
     approved = models.BooleanField(default=False)
     accredited = models.BooleanField(default=False)
+    tours = models.ManyToManyField('turoperator.CommitForPhysicalTour')
 
 
 class TuroperatorIntroducer(AbstractDataUser):
