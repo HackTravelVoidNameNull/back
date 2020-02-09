@@ -4,12 +4,6 @@ from .common import *
 
 # Create your models here.
 
-
-class RolePermission(models.Model):
-
-    value = models.CharField(max_length=32)
-
-
 SYSTEM_ROLES = (
     ('teacher', 'teacher'),
     ('student', 'student'),
@@ -23,7 +17,6 @@ SYSTEM_ROLES = (
 class SystemRole(models.Model):
 
     name = models.CharField(max_length=32, choices=SYSTEM_ROLES)
-    permissions = models.ManyToManyField('RolePermission')
 
 
 class SiteUser(AbstractBaseUser):

@@ -109,3 +109,4 @@ class TeacherTourChoose(HasTeacherPermission, TemplateView):
             tours.oreder_by('-price')
 
         return JsonResponse(serialize('json', tours))
+    
